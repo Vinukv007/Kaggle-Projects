@@ -24,10 +24,14 @@ df.columns
 
 dftest.columns
 
+# Dropping Duplicates
+
 df.drop_duplicates(inplace=True)
 len(df)
 
 dftest.drop_duplicates(inplace=True)
+
+# Creating a dictionary containing columns with Nan values for ease
 
 Nan_dict={}
 for i in df.columns:
@@ -45,10 +49,7 @@ df.info()
 
 dftest.info()
 
-df[['BsmtQual',
-       'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',
-       'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF']][df.BsmtExposure.isna()]
-
+# creating lists with columns that needs to be dealt with Nan Values
 fillna_NA=[
  'Alley',
  'BsmtQual',
@@ -82,7 +83,11 @@ nalist=['GarageCars',
  'BsmtFullBath',
  'BsmtHalfBath']
 
+#to decide what to do with nan data in garageYrBlt
+
 df[['YearBuilt', 'YearRemodAdd','GarageYrBlt']].corr()
+
+# Cleaning the data 
 
 df.GarageYrBlt.fillna(df.YearBuilt,inplace=True)
 df.LotFrontage.fillna(df.LotFrontage.median(),inplace=True)
@@ -114,6 +119,8 @@ df.info()
 
 dftest.info()
 
+# Analysing columns to do label encoding
+
 objectlist=[]
 for i in df.columns:
   if df[i].dtype=='object':
@@ -133,6 +140,8 @@ for i in objectlist:
   lb.fit(df[i])
   df[i]=lb.transform(df[i])
   dftest[i]=lb.transform(dftest[i])
+
+#fitting and predicting the data
 
 x=df.drop(['Id', 'MSSubClass','SalePrice'],1)
 y=df.SalePrice
