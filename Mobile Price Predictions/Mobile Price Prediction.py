@@ -72,7 +72,7 @@ df['battery(Mah)']=df.battery_power.str.extract(r"(\d+)")
 
 #dropping duplicate columns
 
-df.drop([ 'mobile_price', 'disp_size', 'resolution', 'os',
+df.drop([ 'mobile_name','mobile_price', 'disp_size', 'resolution', 'os',
        'num_cores', 'mp_speed', 'int_memory', 'ram', 'p_cam', 'f_cam',
        'network', 'battery_power'],1,inplace=True)
 df.info()
@@ -101,16 +101,14 @@ from sklearn.preprocessing import MinMaxScaler
 
 mms=MinMaxScaler()
 
-df['res_scaled']=mms.fit_transform(df[['res']])
-
-x=df[['display(cm)', 'cores',
-       'clock_speed(GHz)', 'storage', 'primary_cam(MP)', 'back_camera_count',
-       'front_cam(MP)', 'bands', 'battery(Mah)', 'res_scaled']]
+x=df.drop('price(Rs.)',1)
 y=df['price(Rs.)']
 
-new_x=pd.concat([x,pd.get_dummies(df.brand,prefix='brand')],1)
-new_x.drop('brand_Mi',1,inplace=True)
-xtrain,xtest,ytrain, ytest=train_test_split(new_x,y,test_size=0.2, random_state=2)
+x=pd.get_dummies(x,drop_first=True)
+
+x=mms.fit_transform(x)
+
+xtrain,xtest,ytrain, ytest=train_test_split(x,y,test_size=0.2, random_state=2)
 
 from sklearn.linear_model import LinearRegression
 lreg=LinearRegression()
