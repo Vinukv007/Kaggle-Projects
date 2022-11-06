@@ -27,11 +27,17 @@ df.info()
 
 df.columns
 
+# dropping columns that doesnt influence the price
+
 df.drop(['mobile_color', 'dual_sim', 'bluetooth', 'mob_width',
        'mob_height', 'mob_depth', 'mob_weight'],1,inplace=True)
 df.info()
 
 df.columns
+
+# All the columns are strings. extracting digits or names from them 
+
+# Creating new column 'brand' to give brand value influence over price
 
 df['brand']=df.mobile_name.str.extract(r"(\w+)")
 
@@ -64,6 +70,8 @@ df.bands[df.network=='2G']='2G'
 
 df['battery(Mah)']=df.battery_power.str.extract(r"(\d+)")
 
+#dropping duplicate columns
+
 df.drop([ 'mobile_price', 'disp_size', 'resolution', 'os',
        'num_cores', 'mp_speed', 'int_memory', 'ram', 'p_cam', 'f_cam',
        'network', 'battery_power'],1,inplace=True)
@@ -72,6 +80,8 @@ df.info()
 df.head()
 
 df.columns
+
+# converting columns to appropriate datatypes
 
 for i in [ 'price(Rs.)', 'res', 'cores'
        , 'storage', 'primary_cam(MP)', 'back_camera_count',
@@ -82,6 +92,8 @@ df['display(cm)']=df['display(cm)'].astype(float)
 df['clock_speed(GHz)']=df['clock_speed(GHz)'].astype(float)
 
 df.info()
+
+# encoding bands columns according to importance
 
 df.bands=df.bands.map({'4G':3, '3G':2, '2G':1})
 
